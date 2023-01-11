@@ -216,6 +216,7 @@ int input_init(input_parameter *param, int id)
             {"timeout", required_argument, 0, 0},
             {"dv_timings", no_argument, 0, 0},
             {"yu12", no_argument, 0, 0},
+            {"nv12", no_argument, 0, 0},
             {0, 0, 0, 0}
         };
 
@@ -394,6 +395,12 @@ int input_init(input_parameter *param, int id)
             format = V4L2_PIX_FMT_YUV420;
             break;
         #endif
+        #ifndef NO_LIBJPEG
+        case 44:
+            DBG("case 44\n");
+            format = V4L2_PIX_FMT_NV12;
+            break;
+        #endif
        default:
            DBG("default case\n");
            help();
@@ -431,6 +438,9 @@ int input_init(input_parameter *param, int id)
                 break;
             case V4L2_PIX_FMT_YUV420:
                 fmtString = "YU12";
+                break;
+            case V4L2_PIX_FMT_NV12:
+                fmtString = "NV12";
                 break;
             case V4L2_PIX_FMT_RGB24:
                 fmtString = "RGB24";
@@ -555,6 +565,7 @@ void help(void)
     " [-u | --uyvy ] ........: Use UYVY format, default: MJPEG (uses more cpu power)\n" \
     " [-y | --yuv  ] ........: Use YUV format, default: MJPEG (uses more cpu power)\n" \
     " [--yu12 ] .............: Use YU12 format, default: MJPEG (uses more cpu power)\n" \
+    " [--nv12 ] .............: Use nv12 format, default: MJPEG (uses more cpu power)\n" \
     " [-fourcc ] ............: Use FOURCC codec 'argopt', \n" \
     "                          currently supported codecs are: RGB24, RGBP \n" \
     " [-timestamp ]..........: Populate frame timestamp with system time\n" \
@@ -793,6 +804,7 @@ void *cam_thread(void *arg)
             if ((pcontext->videoIn->formatIn == V4L2_PIX_FMT_YUYV) ||
             (pcontext->videoIn->formatIn == V4L2_PIX_FMT_UYVY) ||
             (pcontext->videoIn->formatIn == V4L2_PIX_FMT_YUV420) ||
+            (pcontext->videoIn->formatIn == V4L2_PIX_FMT_NV12) ||
             (pcontext->videoIn->formatIn == V4L2_PIX_FMT_RGB24) ||
             (pcontext->videoIn->formatIn == V4L2_PIX_FMT_RGB565) ) {
                 DBG("compressing frame from input: %d\n", (int)pcontext->id);
