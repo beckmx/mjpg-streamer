@@ -302,6 +302,7 @@ int compress_image_to_jpeg(struct vdIn *vd, unsigned char *buffer, int size, int
         // all Y's are first
         unsigned char* ybase = yuyv;
         // ybase=pYUVBuffer;
+        unsigned char *ubase = NULL;
         ubase=yuyv+uvwidth*uvheight;
         while (cinfo.next_scanline < cinfo.image_height)
         {
