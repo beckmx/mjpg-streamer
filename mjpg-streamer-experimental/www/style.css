@@ -5,7 +5,7 @@ Version: 1.1, November 28, 2005 */
 /**************** Page and tag styles ****************/
 
 body
-{margin:0; padding:0; color:#303030; background:#fafafa url(bodybg.gif) top left repeat-y; font:76% Verdana,Tahoma,sans-serif;}
+{margin:0; padding:0; color:#303030; background:#fafafa; font:76% Verdana,Tahoma,sans-serif;}
 
 ul
 {list-style:circle; margin:15px 0 20px 0; font-size:0.9em;}
@@ -83,18 +83,18 @@ body > #sidebar
 {clear:both; margin:30px 0 10px 0; color:#d85d5d; font-weight:normal; font-size: 2em; letter-spacing:-2px;}
 
 #streamimage {
-width:520px; height: 390px;
+width:960px; height: 544px;
 }
 
 #xform {
-	text-align:right;
+	text-align:center;
 	margin:0 !important;
 }
 #streamwrap {
-	height:350px
+	height:540px
 }
 #streamwrap.rotated {
-	height:450px
+	height:960px
 }
 p.xform-p {
 	height:5px;
