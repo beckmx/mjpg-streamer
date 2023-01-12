@@ -1,7 +1,33 @@
-mjpg-streamer
+mjpg-streamer FOR PS VITA
 =============
 
-This is a fork of http://sourceforge.net/projects/mjpg-streamer/ with added support for the Raspberry Pi camera via the input_raspicam plugin.
+The version that you see in this repository contains still an error for color schema
+I will correct it and make it useful.
+
+You will need to compile from source for your raspberry version. At the time of this
+writing the raspberry I used was the raspberry 3 model B with this output:
+
+uname -a
+Linux solarbot 5.10.63-v7+ #1496 SMP Wed Dec 1 15:58:11 GMT 2021 armv7l GNU/Linux
+
+cat /etc/os-release
+PRETTY_NAME="Raspbian GNU/Linux 10 (buster)"
+NAME="Raspbian GNU/Linux"
+VERSION_ID="10"
+VERSION="10 (buster)"
+VERSION_CODENAME=buster
+ID=raspbian
+ID_LIKE=debian
+HOME_URL="http://www.raspbian.org/"
+SUPPORT_URL="http://www.raspbian.org/RaspbianForums"
+BUG_REPORT_URL="http://www.raspbian.org/RaspbianBugs
+
+lsb_release -a
+No LSB modules are available.
+Distributor ID:	Raspbian
+Description:	Raspbian GNU/Linux 10 (buster)
+Release:	10
+Codename:	buster
 
 mjpg-streamer is a command line application that copies JPEG frames from one
 or more input plugins to multiple output plugins. It can be used to stream
@@ -22,27 +48,6 @@ Security warning
 **WARNING**: mjpg-streamer should not be used on untrusted networks!
 By default, anyone with access to the network that mjpg-streamer is running
 on will be able to access it.
-
-Plugins
--------
-
-Input plugins:
-
-* input_file
-* input_http
-* input_opencv ([documentation](mjpg-streamer-experimental/plugins/input_opencv/README.md))
-* input_ptp2
-* input_raspicam ([documentation](mjpg-streamer-experimental/plugins/input_raspicam/README.md))
-* input_uvc ([documentation](mjpg-streamer-experimental/plugins/input_uvc/README.md))
-
-Output plugins:
-
-* output_file
-* output_http ([documentation](mjpg-streamer-experimental/plugins/output_http/README.md))
-* ~output_rtsp~ (not functional)
-* ~output_udp~ (not functional)
-* output_viewer ([documentation](mjpg-streamer-experimental/plugins/output_viewer/README.md))
-* output_zmqserver ([documentation](mjpg-streamer-experimental/plugins/output_zmqserver/README.md))
 
 Building & Installation
 =======================
@@ -92,22 +97,16 @@ From the mjpeg streamer experimental
 folder:
 ```
 export LD_LIBRARY_PATH=.
-./mjpg_streamer -o "output_http.so -w ./www" -i "input_raspicam.so"
+./mjpg_streamer -i "input_uvc.so -d /dev/video0 -r 960x544 -f 30 --nv12" -o "output_http.so -p 8085 -w ./www"
 ```
-
-See [README.md](mjpg-streamer-experimental/README.md) or the individual plugin's documentation for more details.
-
-Discussion / Questions / Help
-=============================
-
-Probably best in this thread
-http://www.raspberrypi.org/phpBB3/viewtopic.php?f=43&t=45178
 
 Authors
 =======
 
 mjpg-streamer was originally created by Tom Stöveken, and has received
 improvements from many collaborators since then.
+This version right here contains changes from: https://github.com/jacksonliam/mjpg-streamer/
+
 
 
 License
