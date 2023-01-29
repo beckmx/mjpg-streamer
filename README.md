@@ -66,14 +66,12 @@ Simple compilation
 
 This will build and install all plugins that can be compiled.
 
-    cd mjpg-streamer-experimental
     make
     sudo make install
     
 By default, everything will be compiled in "release" mode. If you wish to compile
 with debugging symbols enabled, you can do this:
 
-    cd mjpg-streamer-experimental
     make distclean
     make CMAKE_BUILD_TYPE=Debug
     sudo make install
@@ -84,7 +82,6 @@ Advanced compilation (via CMake)
 There are options available to enable/disable plugins, setup options, etc. This
 shows the basic steps to enable the experimental HTTP management feature:
 
-    cd mjpg-streamer-experimental
     mkdir _build
     cd _build
     cmake -DENABLE_HTTP_MANAGEMENT=ON ..

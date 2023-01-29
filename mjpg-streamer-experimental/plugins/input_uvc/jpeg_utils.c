@@ -253,70 +253,40 @@ int compress_image_to_jpeg(struct vdIn *vd, unsigned char *buffer, int size, int
         unsigned char* yplane = yuyv;
 
         int uvdiv = 2;
-        // previous value
-        // int uvheight = vd->height / uvdiv;
-        // int uvwidth = vd->width / uvdiv;
-        int uvheight = vd->height;
-        int uvwidth = vd->width;
+        int uvheight = vd->height / uvdiv;
+        int uvwidth = vd->width / uvdiv;
 
         // all U's are next
-        //unsigned char* uplane = yplane + vd->height * vd->width;
+        unsigned char* uplane = yplane + vd->height * vd->width;
 
         // finally, all V's are next
-        //unsigned char* vplane = uplane + uvheight * uvwidth;
+        unsigned char* vplane = uplane + uvheight * uvwidth;
 
-        // int y = 0;
-        // while(cinfo.next_scanline < vd->height) {
-        //     int x;
-        //     unsigned char *ptr = line_buffer;
-
-        //     for(x = 0; x < vd->width; x++) {
-        //         int r, g, b;
-        //         int yc, uc, vc;
-                
-        //         yc = yplane[x + y * vd->width] << 8;
-        //         uc = uplane[x / uvdiv + y / uvdiv * uvwidth] - 128;
-        //         vc = vplane[x / uvdiv + y / uvdiv * uvwidth] - 128;
-
-        //         r = (yc + (359 * vc)) >> 8;
-        //         g = (yc - (88 * uc) - (183 * vc)) >> 8;
-        //         b = (yc + (454 * uc)) >> 8;
-
-        //         *(ptr++) = (r > 255) ? 255 : ((r < 0) ? 0 : r);
-        //         *(ptr++) = (g > 255) ? 255 : ((g < 0) ? 0 : g);
-        //         *(ptr++) = (b > 255) ? 255 : ((b < 0) ? 0 : b);
-        //     }
-        //     y++;
-        //     row_pointer[0] = line_buffer;
-        //     jpeg_write_scanlines(&cinfo, row_pointer, 1);
-        // }
-
-        // ------>startn nv12
-        int i=0, j=0;
-        int idx=0;
-        // if(!(yuvbuf=(unsigned char *)malloc(uvwidth*3))!=NULL)
-        // {
-        //     return -1;
-        // }
-        // memset(yuvbuf, 0, uvwidth*3);
-        // all Y's are first
-        unsigned char* ybase = yuyv;
-        // ybase=pYUVBuffer;
-        unsigned char *ubase = NULL;
-        ubase=yuyv+uvwidth*uvheight;
-        while (cinfo.next_scanline < cinfo.image_height)
-        {
+        int y = 0;
+        while(cinfo.next_scanline < vd->height) {
+            int x;
             unsigned char *ptr = line_buffer;
-            idx=0;
-            for(i=0;i<uvwidth;i++)
-            {   
-                *(ptr++)=ybase[i + j * uvwidth];
-                *(ptr++)=ubase[j/2 * uvwidth+(i/2)*2];
-                *(ptr++)=ubase[j/2 * uvwidth+(i/2)*2+1];
-            }  
+
+            for(x = 0; x < vd->width; x++) {
+                int r, g, b;
+                int yc, uc, vc;
+                
+                yc = yplane[x + y * vd->width] << 8;
+                uc = uplane[x / uvdiv + y / uvdiv * uvwidth] - 128;
+                vc = vplane[x / uvdiv + y / uvdiv * uvwidth] - 128;
+
+                r = (yc + (359 * vc)) >> 8;
+                g = (yc - (88 * uc) - (183 * vc)) >> 8;
+                b = (yc + (454 * uc)) >> 8;
+
+                *(ptr++) = (r > 255) ? 255 : ((r < 0) ? 0 : r);
+                *(ptr++) = (g > 255) ? 255 : ((g < 0) ? 0 : g);
+                *(ptr++) = (b > 255) ? 255 : ((b < 0) ? 0 : b);
+            }
+            
+            y++;
             row_pointer[0] = line_buffer;
             jpeg_write_scanlines(&cinfo, row_pointer, 1);
-            j++;
         }
         // ------> finish nv12
     } else if (vd->formatIn == V4L2_PIX_FMT_RGB24) {
